@@ -1,12 +1,12 @@
 version: '3'
 services:
     web:
-        image: nginx:alpine
+        image: nginx
         container_name: nginx
         volumes:
             - "./etc/nginx:/etc/nginx/conf.d"
             - "./etc/ssl:/etc/ssl"
-            - "./web:/var/www/html"
+            - "/srv/http:/var/www/html"
         ports:
             - "8000:80"
             - "3000:443"
@@ -23,7 +23,7 @@ services:
         container_name: php
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
-            - "./web:/var/www/html"
+            - "/srv/http:/var/www/html"
     redis:
         image: redis
         restart: always
