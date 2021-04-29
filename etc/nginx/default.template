@@ -13,17 +13,23 @@ server {
     set $virtualdir "";
     set $realdir "";
 
-    if ($request_uri ~ ^/([^/]*)/.*$ ) {
-        set $virtualdir /$1;
-    }
-
-    if (-d "$document_root$virtualdir") {
-        set $realdir "${virtualdir}";
-    }
-
     location / {
-        try_files $uri $uri/ $realdir/index.php?$args;
+        if (!-e $request_filename) {
+            rewrite  ^(.*)$  /index.php?s=/$1  last;
+            break;
+        }
     }
+    # if ($request_uri ~ ^/([^/]*)/.*$ ) {
+    #     set $virtualdir /$1;
+    # }
+
+    # if (-d "$document_root$virtualdir") {
+    #     set $realdir "${virtualdir}";
+    # }
+
+    # location / {
+    #     try_files $uri $uri/ $realdir/index.php?$args;
+    # }
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
